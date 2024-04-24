@@ -1,0 +1,19 @@
+name = "mcre-workers-do-timeouts"
+main = "build/worker/shim.mjs"
+compatibility_date = "2023-12-01"
+logpush = true
+
+[build]
+command = "cargo install -q worker-build && worker-build --release"
+
+[env.dev]
+build = { command = "cargo install -q worker-build && worker-build --dev" }
+
+[durable_objects]
+bindings = [
+    { name = "OVERWORKED", class_name = "OverworkedObject" } # the `class_name` uses the Rust struct identifier name
+]
+
+[[migrations]]
+tag = "v1" # Should be unique for each entry
+new_classes = ["OverworkedObject"] # Array of new classes
